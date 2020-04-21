@@ -13,6 +13,10 @@ description: |
         /test/one:
             result: TEST_RESULT
             log: PATH
+            checks:
+                CHECK_NAME:
+                    result: TEST_RESULT
+                    log: PATH
 
         /test/two:
             result: TEST_RESULT
@@ -24,12 +28,21 @@ description: |
         * info - test finished and produced only information
           message
         * passed - test finished and passed
+        * warning - test finished and passed with a warning,
+          like an ``avc`` check failure
         * failed - test finished and failed
         * error - a problem encountered during test execution,
           treated as failed
 
     Where ``PATH`` is the test log output path, relative to the
     execute step plan run directory.
+
+    Where ``CHECK_NAME`` specifies a check which was executed during
+    the testing. Multiple checks can end up here.
+
+    Checks can be overridden by the ``checks`` property of the
+    ``execute`` step. The property in execute overrides all checks
+    from the test attribute.
 
 example: |
     execute:
@@ -92,6 +105,22 @@ example: |
             script into a file and execute.
         example: |
             execute:
+                script: |
+                    dnf -y install httpd curl
+                    systemctl start httpd
+                    echo foo > /var/www/html/index.html
+                    curl http://localhost/ | grep foo
+
+    /script-no-avc:
+        summary: Multi-line shell script without the default AVC check
+        description:
+            Providing a multi-line shell script is also
+            supported. In that case executor will store given
+            script into a file and execute. The ``avc`` check is disabled
+            when running this test.
+        example: |
+            execute:
+                checks: -avc
                 script: |
                     dnf -y install httpd curl
                     systemctl start httpd

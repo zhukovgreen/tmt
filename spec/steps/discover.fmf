@@ -32,6 +32,7 @@ description: |
             tier: 1
             relevancy: |
                 distro < rhel-8: False
+            checks: -avc
 
         /test/two:
             summary: Short test summary.
