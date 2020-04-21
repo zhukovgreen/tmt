@@ -4,7 +4,15 @@ discover:
     how: fmf
     filter: 'tier: 0,1'
 prepare:
+  - summary: Enable copr repo
+    name: copr
+    how: install
+    copr: psss/tmt
+    order: 30
+  - summary: Prepare packages
+    name: packages
     how: ansible
     playbooks: ansible/packages.yml
+    order: 80
 execute:
     how: beakerlib

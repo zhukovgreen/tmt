@@ -1,4 +1,8 @@
 summary:
     Just a basic smoke test
+prepare:
+    how: install
+    copr: psss/tmt
+    package: tmt
 execute:
     script: tmt --help
