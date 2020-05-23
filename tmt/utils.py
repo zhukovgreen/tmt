@@ -187,6 +187,8 @@ class Common(object):
         """ Append provided message to the current log """
         if self.workdir is None:
             return
+        if self.parent:
+            self.parent._log(message)
         with open(os.path.join(self.workdir, 'log.txt'), 'a') as log:
             log.write(message + '\n')
 

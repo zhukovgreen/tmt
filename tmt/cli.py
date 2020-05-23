@@ -240,6 +240,24 @@ def tests(context, **kwargs):
     tmt.base.Test._save_context(context)
 
 
+@run.command()
+@click.pass_context
+@click.option(
+    '-s', '--show', is_flag=True, help="Show the whole log.")
+@click.option(
+    '-t', '--tail', is_flag=True, help="Show tail of the log.")
+@click.option(
+    '-f', '--follow', is_flag=True, help="Follow the log updates.")
+def log(context, **kwargs):
+    """
+    Check the run log for details
+
+    Useful to check detailed output log of a finished run or to
+    follow progress of a test run running in a different terminal.
+    """
+    tmt.base.Log._save_context(context)
+
+
 @run.resultcallback()
 @click.pass_context
 def finito(context, commands, *args, **kwargs):
