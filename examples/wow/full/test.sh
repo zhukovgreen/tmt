@@ -10,6 +10,7 @@ rlJournalStart
 
     rlPhaseStartTest
         # Install tmt, start libvirtd, clone report and look around
+        rlRun "dnf copr enable -y psss/tmt" 0 "Enable copr repository"
         rlRun "dnf install -y tmt-all" 0 "Install the full tmt package"
         rlRun "systemctl start libvirtd" 0 "Start libvirtd"
         rlRun "git clone https://github.com/psss/tmt"

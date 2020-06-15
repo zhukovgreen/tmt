@@ -9,6 +9,7 @@ rlJournalStart
     rlPhaseEnd
 
     rlPhaseStartTest
+        rlRun "dnf copr enable -y psss/tmt" 0 "Enable copr repository"
         rlRun "dnf install -y tmt" 0 "Install the base tmt package"
         rlRun "tmt init -t base" 0 "Initialize with the base template"
         rlRun "tmt run -i $run -av provision -h local" 0 "Run the example"
