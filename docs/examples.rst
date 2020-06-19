@@ -778,3 +778,9 @@ step to remove provisioned guest::
 
 See the :ref:`/stories/cli/run/login` user stories for more
 details and examples.
+
+.. raw:: html
+
+   <script id="asciicast-BebC3LWc4wJWLUJPfDaZUMtGu"
+   src="https://asciinema.org/a/BebC3LWc4wJWLUJPfDaZUMtGu.js"
+   async></script>
