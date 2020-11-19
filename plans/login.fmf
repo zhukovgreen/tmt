@@ -1,0 +1,7 @@
+summary:
+    Run tests for the login support
+discover:
+    how: fmf
+    filter: coverage:/stories/cli/run/login.*
+provision:
+    how: container

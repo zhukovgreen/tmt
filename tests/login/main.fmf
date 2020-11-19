@@ -3,8 +3,9 @@ path: /tests/login
 /step:
     summary: Check login step selection
     test: ./step.sh
+    coverage: /stories/cli/run/login/select
 
 /when:
     summary: Check login result condition
     test: ./when.sh
-
+    coverage: /stories/cli/run/login/status
