@@ -7,6 +7,7 @@ from click import echo, style
 import tmt.utils
 import email
 import fmf
+import os
 import re
 
 from tmt.utils import ConvertError
@@ -213,7 +214,8 @@ def create_nitrate_case(test):
         category = 'Sanity'
 
     # Create the new test case
-    summary = test.node.get('extra-summary', test.summary)
+    summary = test.node.get('extra-summary', os.path.basename(test.node.root)
+              + test.name + ' - ' + test.summary)
     category = nitrate.Category(name=category, product=DEFAULT_PRODUCT)
     testcase = nitrate.TestCase(summary=summary, category=category)
     echo(style(f"Test case '{testcase.identifier}' created.", fg='blue'))
