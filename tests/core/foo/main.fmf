@@ -1,0 +1,6 @@
+summary: This test is not suitable for Fedora 32
+test: ./test.sh
+framework: beakerlib
+adjust:
+    enabled: False
+    when: distro == fedora-32
