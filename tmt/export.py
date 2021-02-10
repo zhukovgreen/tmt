@@ -214,6 +214,8 @@ def create_nitrate_case(test):
         category = 'Sanity'
 
     # Create the new test case
+    if not os.path.basename(test.fmf_id['url']):
+        raise ConvertError("Unable to find git remote url.")
     summary = test.node.get('extra-summary', os.path.basename(test.fmf_id['url'])
               + test.name + ' - ' + test.summary)
     category = nitrate.Category(name=category, product=DEFAULT_PRODUCT)
