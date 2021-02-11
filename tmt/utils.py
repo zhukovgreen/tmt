@@ -7,7 +7,7 @@ from collections import OrderedDict
 from threading import Timer
 import unicodedata
 import subprocess
-import fmf.utils
+import fmf
 import pprint
 import shlex
 import select
@@ -776,8 +776,8 @@ def verdict(decision, comment=None, good='pass', bad='fail', problem='warn'):
     """
     Return verdict in green or red based on the decision
 
-    0 or False ... good (green)
-    1 or True .... bad (red)
+    0 or False ... bad (red)
+    1 or True .... good (green)
     otherwise .... problem (yellow)
     """
 
@@ -950,6 +950,30 @@ def retry_session(retries=3, backoff_factor=0.1, method_whitelist=False,
 def remove_color(text):
     """ Remove ansi color sequences from the string """
     return re.sub(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])', '', text)
+
+
+def validate_fmf_id(fmf_id):
+    """
+    Validate given FMF id and return a human readable error.
+    """
+    # validate remote id and translate to human readable errors
+    try:
+        fmf.base.Tree.node(fmf_id)
+    except fmf.utils.GeneralError as error:
+        # map fmf errors to more user friendly alternatives
+        error_map = [
+            ('git clone', f'repo \'{fmf_id["url"]}\' cannot be cloned'),
+            ('git checkout', f'git ref \'{fmf_id["ref"]}\' is invalid'),
+            ('directory path', f'path \'{fmf_id["path"]}\' is invalid'),
+            ('tree root',
+             f'No tree found in repo \'{fmf_id["url"]}\', '
+              'missing .fmf directory?'
+             )
+        ]
+        errors = list(filter(lambda a: a[0] in str(error), error_map))
+        return (False, errors[0][1] if errors else str(error))
+
+    return (True, '')
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
