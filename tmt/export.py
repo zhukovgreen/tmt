@@ -54,14 +54,15 @@ def export_to_nitrate(test, create, general):
         if create:
             nitrate_case = create_nitrate_case(test)
             new_test_created = True
+            test._metadata['extra-summary'] = nitrate_case.summary
         else:
             raise ConvertError("Nitrate test case id not found.")
     except (nitrate.NitrateError, gssapi.raw.misc.GSSError) as error:
         raise ConvertError(error)
 
     # Summary
-    summary = test.node.get(
-        'extra-summary', test.node.get('extra-task', test.summary))
+    summary = test._metadata.get('extra-summary') \
+            or test._metadata.get('extra-task') or test.summary or ''
     if summary:
         nitrate_case.summary = summary
         echo(style('summary: ', fg='green') + summary)
