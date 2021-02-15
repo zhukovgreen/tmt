@@ -47,7 +47,7 @@ def export_to_nitrate(test, create, general):
     try:
         nitrate_id = test.node.get('extra-nitrate')[3:]
         nitrate_case = nitrate.TestCase(int(nitrate_id))
-        nitrate_case.summary # Make sure we connect to the server now
+        nitrate_case.summary  # Make sure we connect to the server now
         echo(style(f"Test case '{nitrate_case.identifier}' found.", fg='blue'))
     except TypeError:
         # Create a new nitrate test case
@@ -62,7 +62,7 @@ def export_to_nitrate(test, create, general):
 
     # Summary
     summary = test._metadata.get('extra-summary') \
-            or test._metadata.get('extra-task') or test.summary or ''
+        or test._metadata.get('extra-task') or test.summary or ''
     if summary:
         nitrate_case.summary = summary
         echo(style('summary: ', fg='green') + summary)
@@ -159,7 +159,7 @@ def export_to_nitrate(test, create, general):
         'purpose-file': test.description,
         'hardware': test.node.get('extra-hardware'),
         'pepa': test.node.get('extra-pepa'),
-        }
+    }
     for section, attribute in section_to_attr.items():
         if attribute is None:
             try:
@@ -218,7 +218,7 @@ def create_nitrate_case(test):
     if not os.path.basename(test.fmf_id['url']):
         raise ConvertError("Unable to find git remote url.")
     summary = test.node.get('extra-summary', os.path.basename(test.fmf_id['url'])
-              + test.name + ' - ' + test.summary)
+                            + test.name + ' - ' + test.summary)
     category = nitrate.Category(name=category, product=DEFAULT_PRODUCT)
     testcase = nitrate.TestCase(summary=summary, category=category)
     echo(style(f"Test case '{testcase.identifier}' created.", fg='blue'))
