@@ -187,10 +187,14 @@ def export_to_nitrate(test, create, general):
     # Append id of newly created nitrate case to its file
     if new_test_created:
         fmf_file_path = test.node.sources[-1]
-        echo(style(f"Append test case id into '{fmf_file_path}'.", fg='green'))
         try:
             with open(fmf_file_path, encoding='utf-8', mode='a+') as fmf_file:
                 fmf_file.write(f"extra-nitrate: {nitrate_case.identifier}\n")
+                echo(style(f"Append test case id into '{fmf_file_path}'.",
+                    fg='green'))
+                fmf_file.write(f"extra-summary: {nitrate_case.summary}\n")
+                echo(style(f"Append test case summary into '{fmf_file_path}'.",
+                    fg='green'))
         except IOError:
             raise ConvertError("Unable to open '{0}'.".format(fmf_file_path))
 
