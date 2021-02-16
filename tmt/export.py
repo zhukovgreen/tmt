@@ -61,8 +61,11 @@ def export_to_nitrate(test, create, general):
         raise ConvertError(error)
 
     # Summary
-    summary = test._metadata.get('extra-summary') \
-        or test._metadata.get('extra-task') or test.summary or ''
+    summary = (test._metadata.get('extra-summary')
+        or test._metadata.get('extra-task')
+        or test.summary
+        or ''
+    )
     if summary:
         nitrate_case.summary = summary
         echo(style('summary: ', fg='green') + summary)
