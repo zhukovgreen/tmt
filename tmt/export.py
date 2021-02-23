@@ -54,6 +54,7 @@ def export_to_nitrate(test, create, general):
         if create:
             nitrate_case = create_nitrate_case(test)
             new_test_created = True
+            # Newly created tmt tests have special format summary
             test._metadata['extra-summary'] = nitrate_case.summary
         else:
             raise ConvertError("Nitrate test case id not found.")
@@ -65,7 +66,7 @@ def export_to_nitrate(test, create, general):
         or test._metadata.get('extra-task')
         or test.summary
         or ''
-    )
+        )
     if summary:
         nitrate_case.summary = summary
         echo(style('summary: ', fg='green') + summary)
@@ -162,7 +163,7 @@ def export_to_nitrate(test, create, general):
         'purpose-file': test.description,
         'hardware': test.node.get('extra-hardware'),
         'pepa': test.node.get('extra-pepa'),
-    }
+        }
     for section, attribute in section_to_attr.items():
         if attribute is None:
             try:
@@ -222,10 +223,11 @@ def create_nitrate_case(test):
         category = 'Sanity'
 
     # Create the new test case
-    if not os.path.basename(test.fmf_id['url']):
+    remote_dirname = os.path.basename(test.fmf_id['url'])
+    if not remote_dirname:
         raise ConvertError("Unable to find git remote url.")
-    summary = test.node.get('extra-summary', os.path.basename(test.fmf_id['url'])
-                            + test.name + ' - ' + test.summary)
+    summary = test.node.get('extra-summary', remote_dirname + test.name + ' - '
+                            + test.summary)
     category = nitrate.Category(name=category, product=DEFAULT_PRODUCT)
     testcase = nitrate.TestCase(summary=summary, category=category)
     echo(style(f"Test case '{testcase.identifier}' created.", fg='blue'))
