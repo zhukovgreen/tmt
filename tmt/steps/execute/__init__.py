@@ -261,5 +261,11 @@ class ExecutePlugin(tmt.steps.Plugin):
         except AttributeError:
             self.debug(f"No result in '{beakerlib_results_file}'.", level=3)
             return tmt.Result(data, test.name)
-        data['result'] = result.lower()
+        # Beakerlib itself has to end with 0
+        if test.returncode != 0:
+            data['result'] = 'error'
+            if test.returncode == tmt.utils.PROCESS_TIMEOUT:
+                data['note'] = 'timeout'
+        else:
+            data['result'] = result.lower()
         return tmt.Result(data, test.name)

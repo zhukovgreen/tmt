@@ -84,16 +84,17 @@ class ExecuteDetach(tmt.steps.execute.ExecutePlugin):
 
     def check(self, test):
         """ Check the test result """
+        # Need exitcode for both shell and beakerlib
+        # Get the exit code from the file
+        try:
+            exit_code_file = self.data_path(test, 'exitcode.log')
+            test.returncode = int(self.step.read(exit_code_file).strip())
+        except tmt.utils.FileError:
+            self.debug(f"Exit code not found for '{test.name}'.", level=3)
+            test.returncode = 255 # Needs some integer
         if test.framework == 'beakerlib':
             return self.check_beakerlib(test)
         else:
-            # Get the exit code from the file
-            try:
-                exit_code_file = self.data_path(test, 'exitcode.log')
-                test.returncode = int(self.step.read(exit_code_file).strip())
-            except tmt.utils.FileError:
-                self.debug(f"Exit code not found for '{test.name}'.", level=3)
-                test.returncode = None
             return self.check_shell(test)
 
     def go(self):
