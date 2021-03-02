@@ -259,7 +259,7 @@ class ExecutePlugin(tmt.steps.Plugin):
             matched_result = re.search('TESTRESULT_RESULT_STRING=(.*)', results)
             result = matched_result.group(1)
             matched_state = re.search('TESTRESULT_STATE=(.*)', results)
-            state = matched_result.group(1)
+            state = matched_state.group(1)
         except AttributeError:
             self.debug(f"No result or state found in '{beakerlib_results_file}'.", level=3)
             return tmt.Result(data, test.name)
