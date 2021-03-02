@@ -256,16 +256,25 @@ class ExecutePlugin(tmt.steps.Plugin):
             self.debug(f"Unable to read '{beakerlib_results_file}'.", level=3)
             return tmt.Result(data, test.name)
         try:
-            matched = re.search('TESTRESULT_RESULT_STRING=(.*)', results)
-            result = matched.group(1)
+            matched_result = re.search('TESTRESULT_RESULT_STRING=(.*)', results)
+            result = matched_result.group(1)
+            matched_state = re.search('TESTRESULT_STATE=(.*)', results)
+            state = matched_result.group(1)
         except AttributeError:
-            self.debug(f"No result in '{beakerlib_results_file}'.", level=3)
+            self.debug(f"No result or state found in '{beakerlib_results_file}'.", level=3)
             return tmt.Result(data, test.name)
-        # Beakerlib itself has to end with 0
+        # Beakerlib itself has to end with zero (copying Beaker here)
         if test.returncode != 0:
             data['result'] = 'error'
             if test.returncode == tmt.utils.PROCESS_TIMEOUT:
                 data['note'] = 'timeout'
+            else:
+                data['note'] = f'Non-zero exit code: {test.returncode}'
+        # Test results should be in complete state
+        elif state != 'complete':
+            data['result'] = 'error'
+            data['note'] = f"Beakerlib ended in '{state}' state"
+        # Finally we have a valid result
         else:
             data['result'] = result.lower()
         return tmt.Result(data, test.name)
