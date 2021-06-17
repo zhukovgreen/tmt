@@ -3,6 +3,7 @@ import random
 import re
 import shlex
 import string
+from typing import Tuple
 
 import click
 import fmf
@@ -196,9 +197,11 @@ class Guest(tmt.utils.Common):
     # (used for import/export to/from attributes during load and save)
     _keys = ['guest', 'port', 'user', 'key', 'password']
 
-    def __init__(self, data, name=None, parent=None):
+    def __init__(self, data, name=None, parent=None,
+                 new_keys: Tuple[str, ...] = ()):
         """ Initialize guest data """
         super().__init__(parent, name)
+        self._keys.extend(new_keys)
         self.load(data)
 
     def _random_name(self, prefix='', length=16):
