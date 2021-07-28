@@ -1,8 +1,6 @@
 summary: Check the work with env_file
 description:
     Verify that
-    - variables from env_file gets propagated to the environment
-    - env_file type could be .env, yaml or sh formats (test each case)
-    - conflict handling (env_file) and environment has the same vars
-      with different values
-    - cli option --environment-file env_file takes precedence
+    - environment-file can get vars from the file and url of dotenv and yaml fmts
+    - environment option takes precedence over environment-file
+    - cli specified options takes precendence over fmf one
